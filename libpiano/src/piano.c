@@ -306,18 +306,6 @@ PianoReturn_t PianoRateTrack (PianoHandle_t *ph, PianoSong_t *song,
 
 	if (ret == PIANO_RET_OK) {
 		song->rating = rating;
-        
-
-        /*
-         * Download track section by cannabliss of #weedit
-         */
-        char *uri = song->audioUrl;
-        char *artist = song->artist;
-        char *title = song->title;
-
-        char command[strlen(uri)]; // Should be len(uri) + seventeen + len(artist) + len(title)
-        sprintf(command, "wget \"%s\" -O ~/%s-%s.mp3", uri, artist, title);
-        system(command);
 	}
 
 	return ret;

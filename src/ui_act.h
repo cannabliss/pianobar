@@ -35,6 +35,7 @@ void BarUiActDeleteStation (BAR_KS_ARGS);
 void BarUiActExplain (BAR_KS_ARGS);
 void BarUiActStationFromGenre (BAR_KS_ARGS);
 void BarUiActSongInfo (BAR_KS_ARGS);
+void BarUiSavePianoSong(const BarSettings_t *settings, const PianoSong_t *song);
 void BarUiActLoveSong (BAR_KS_ARGS);
 void BarUiActSkipSong (BAR_KS_ARGS);
 void BarUiActMoveSong (BAR_KS_ARGS);

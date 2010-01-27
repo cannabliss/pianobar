@@ -74,6 +74,7 @@ typedef struct {
 	char *autostartStation;
 	char *eventCmd;
 	unsigned int history;
+    char *downloadDir;
 } BarSettings_t;
 
 typedef void (*BarKeyShortcutFunc_t) (BAR_KS_ARGS);

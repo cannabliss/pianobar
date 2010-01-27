@@ -140,6 +140,9 @@ void BarSettingsRead (BarSettings_t *settings) {
 			settings->lastfmPassword = strdup (val);
 		} else if (strcmp ("lastfm_scrobble_percent", key) == 0) {
 			settings->lastfmScrobblePercent = atoi (val);
+        } else if (strcmp ("download_dir", key) == 0) {
+			settings->downloadDir = strdup (val);
+
 		} else if (memcmp ("act_", key, 4) == 0) {
 			/* keyboard shortcuts */
 			for (i = 0; i < BAR_KS_COUNT; i++) {
@@ -176,6 +179,10 @@ void BarSettingsRead (BarSettings_t *settings) {
 	if (settings->lastfmUser != NULL && settings->lastfmPassword != NULL) {
 		settings->enableScrobbling = 1;
 	}
+    
+    if (settings->downloadDir == NULL) {
+        settings->downloadDir = "/tmp/";
+    }
 
 	fclose (configfd);
 }
