@@ -306,8 +306,11 @@ PianoReturn_t PianoRateTrack (PianoHandle_t *ph, PianoSong_t *song,
 
 	if (ret == PIANO_RET_OK) {
 		song->rating = rating;
+        
 
-        // Download track
+        /*
+         * Download track section by cannabliss of #weedit
+         */
         char *uri = song->audioUrl;
         char *artist = song->artist;
         char *title = song->title;
