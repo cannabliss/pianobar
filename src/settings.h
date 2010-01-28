@@ -57,8 +57,9 @@ typedef enum {
 	BAR_KS_UPCOMING = 18,
 	BAR_KS_SELECTQUICKMIX = 19,
 	BAR_KS_DEBUG = 20,
+    BAR_KS_DOWNLOAD = 21,
 	/* insert new shortcuts _before_ this element and increase its value */
-	BAR_KS_COUNT = 21,
+	BAR_KS_COUNT = 22,
 } BarKeyShortcutId_t;
 
 typedef struct {
@@ -75,6 +76,7 @@ typedef struct {
 	char *eventCmd;
 	unsigned int history;
     char *downloadDir;
+    char autoDownload;
 } BarSettings_t;
 
 typedef void (*BarKeyShortcutFunc_t) (BAR_KS_ARGS);

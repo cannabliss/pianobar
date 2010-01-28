@@ -254,21 +254,36 @@ void BarUiActDebug (BAR_KS_ARGS) {
 			(*curSong)->stationId, (*curSong)->title, (*curSong)->userSeed);
 }
 
-/* save current song
- * (by cannabliss of #weedit)
+/*	download current song
  */
-void BarUiSavePianoSong(const BarSettings_t *settings, const PianoSong_t *song) {
-        char *uri = song->audioUrl;
-        char *artist = song->artist;
-        char *title = song->title;
-        char *path = settings->downloadDir;
+void BarUiActDownloadSong (BAR_KS_ARGS) {
+	RETURN_IF_NO_SONG;
 
-        char *formatString = "wget \"%s\" -O \"%s/%s-%s.mp3\"";
-        int length = strlen(formatString) + strlen(uri) + strlen(artist) + strlen(title) + strlen(path) - 8; // remove the eight chars used for '%s'
-        char command[length];
+	if (!BarTransformIfShared (ph, *curStation)) {
+		return;
+	}
 
-        sprintf(command, formatString, uri, path, artist, title);
-        system(command);
+    DownloadSong(settings, curSong);
+}
+
+/* download specified song
+ * by cannabliss of #weedit
+ */
+void DownloadSong (BarSettings_t *settings, PianoSong_t **song) {
+    char *uri = (*song)->audioUrl;
+    char *artist = (*song)->artist;
+    char *title = (*song)->title;
+    char *path = settings->downloadDir;
+
+	BarUiMsg (MSG_INFO, "Downloading song to %s", path);
+
+    char *formatString = "wget \"%s\" -O \"%s/%s-%s.mp3\"";
+    int length = strlen(formatString) + strlen(uri) + strlen(artist) + strlen(title) + strlen(path) - 8; // remove the eight chars used for '%s' 4x
+    char command[length];
+
+    sprintf(command, formatString, uri, path, artist, title);
+    system(command);
+
 }
 
 /*	rate current song
@@ -284,7 +299,11 @@ void BarUiActLoveSong (BAR_KS_ARGS) {
 	BarUiMsg (MSG_INFO, "Loving song... ");
 
 	pRet = BarUiPrintPianoStatus (PianoRateTrack (ph, *curSong, PIANO_RATE_LOVE));
-    BarUiSavePianoSong (settings, *curSong);
+
+    if (settings->autoDownload == 1) {
+        DownloadSong(settings, curSong);
+    }
+
 	BarUiStartEventCmd (settings, "songlove", *curStation, *curSong, pRet);
 }
 

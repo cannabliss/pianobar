@@ -78,6 +78,7 @@ void BarSettingsDestroy (BarSettings_t *settings) {
 	free (settings->lastfmPassword);
 	free (settings->autostartStation);
 	free (settings->eventCmd);
+    free (settings->downloadDir);
 	memset (settings, 0, sizeof (*settings));
 }
 
@@ -92,7 +93,7 @@ void BarSettingsRead (BarSettings_t *settings) {
 	FILE *configfd;
 	/* _must_ have same order as in BarKeyShortcutId_t */
 	const char defaultKeys[] = {'?', '+', '-', 'a', 'c', 'd', 'e', 'g',
-			'h', 'i', 'j', 'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'x', '$'};
+			'h', 'i', 'j', 'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'x', '$', '.'};
 	const char *shortcutFileKeys[] = {
 			"act_help", "act_songlove", "act_songban", "act_stationaddmusic",
 			"act_stationcreate", "act_stationdelete", "act_songexplain",
@@ -100,7 +101,7 @@ void BarSettingsRead (BarSettings_t *settings) {
 			"act_addshared", "act_songmove", "act_songnext", "act_songpause",
 			"act_quit", "act_stationrename", "act_stationchange",
 			"act_songtired", "act_upcoming", "act_stationselectquickmix",
-			"act_debug"
+			"act_debug", "act_download"
 			};
 
 	/* apply defaults */
@@ -142,7 +143,12 @@ void BarSettingsRead (BarSettings_t *settings) {
 			settings->lastfmScrobblePercent = atoi (val);
         } else if (strcmp ("download_dir", key) == 0) {
 			settings->downloadDir = strdup (val);
-
+        } else if (strcmp ("download_loved_tracks", key) == 0) {
+            if (strcmp (val, "yes") == 0) {
+                settings->autoDownload = 1;
+            } else if (strcmp (val, "no") == 0) {
+                settings->autoDownload = 0;
+            }
 		} else if (memcmp ("act_", key, 4) == 0) {
 			/* keyboard shortcuts */
 			for (i = 0; i < BAR_KS_COUNT; i++) {
@@ -181,7 +187,7 @@ void BarSettingsRead (BarSettings_t *settings) {
 	}
     
     if (settings->downloadDir == NULL) {
-        settings->downloadDir = "/tmp/";
+        settings->downloadDir = "/tmp";
     }
 
 	fclose (configfd);
